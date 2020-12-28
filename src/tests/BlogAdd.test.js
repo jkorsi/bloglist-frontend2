@@ -1,7 +1,7 @@
 import React from 'react'
 import {render, fireEvent} from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
-import BlogAdd from './BlogAdd'
+import BlogAdd from '../components/BlogAdd'
 
 test('BlogAdd calls handleAddBlog with correct content', () =>
 {

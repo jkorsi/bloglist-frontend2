@@ -1,18 +1,41 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { useState} from 'react'
+import {useDispatch} from 'react-redux'
+import {showAndHideMessage} from '../reducers/notificationReducer'
+import {createBlog} from '../reducers/blogListReducer'
 
-const addBlog = ({
-  handleAddBlog,
-  setTitle,
-  setAuthor,
-  setBlogurl,
-  title,
-  author,
-  blogUrl
+const AddBlog = ({
+  user
 }) =>
 {
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [blogUrl, setBlogurl] = useState('')
+
+  const dispatch = useDispatch()
+
+  const handleAddBlog = async (event) =>
+  {
+    event.preventDefault()
+    const blogObject = {
+      title: title,
+      author: author,
+      url: blogUrl,
+      user: user,
+      likes: 0
+    }
+    dispatch(createBlog(blogObject))
+    console.log('Blogobject:', blogObject)
+
+    setTitle('')
+    setAuthor('')
+    setBlogurl('')
+
+    const msg = `New blog added. Blog: ${blogObject.title}, Author: ${blogObject.author}`
+    dispatch(showAndHideMessage(msg, true, 3))
+  }
+
   return (
-<form id='form' onSubmit={handleAddBlog}>
+    <form id='form' onSubmit={handleAddBlog}>
       <h2>Add New Blog</h2>
       <div>
                 Title: {' '}
@@ -49,14 +72,4 @@ const addBlog = ({
   )
 }
 
-addBlog.protoTypes = {
-  handleAddBlog: PropTypes.func.isRequired,
-  setTitle: PropTypes.func.isRequired,
-  setAuthor: PropTypes.func.isRequired,
-  setBlogurl: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
-  blogUrl: PropTypes.string.isRequired
-}
-
-export default addBlog
+export default AddBlog
